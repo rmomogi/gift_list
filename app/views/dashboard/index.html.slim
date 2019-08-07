@@ -1,0 +1,60 @@
+- unless @default_gift_list
+  .col-md-4.col-sm-12.offset-md-4.mt-5
+    .card
+      .card-header.bg-secondary.card-xs
+        span.text-white Projeto
+      .card-body
+          | Selecione a lista que deseja usar para inclusão
+- else
+  .row.mt-4
+    .col-xs-12.ml-4
+      = category_tree(@parent)
+
+  .row.mt-4
+    - unless @categories.count == 0
+      .col-md-2
+        .card
+          .row
+            .col-md-12
+              .card-header.bg-secondary.text-center
+                span.text-white Categorias
+              .card-body.height-12
+                ul.category
+                - @categories.each do |category|
+                  li
+                    = link_to authenticated_root_path(category_id: category.id) do
+                      = category.name
+    - else
+      .offset-md-2
+
+    .col-md-10
+      - if @records.count > 0
+        - @records.each_slice(4) do |items|
+          .row
+            - items.each do |item|
+              .col-md-3.col-xs-12
+                = form_tag gift_lists_add_item_path(stock: item.id), remote: true
+                  .card.mb-3
+                    .row
+                      .col-md-12
+                        .text-center.m-2
+                          = image_tag(item.product.logo, class:'img.card-img-top', alt:"Product", height: '64', width: '64')
+                        .card-body.height-12
+                          .text-center
+                            .font-weight-bold
+                              = item.product.name
+                            .price
+                              = item.price.format
+                            .quantity
+                              = "#{item.quantity} disponíveis"
+                            .stock
+                              = text_field_tag :quantity, '1', type:'number', min:'1', step:'1', value:'1', class:'text-center form-control'
+                        .card-footer.text-right
+                          = submit_tag 'Adicionar a lista', { class: 'btn btn-warning', method: 'post', id: item.id }
+      - else
+        .text-center
+          h5 Selecione a categoria
+  - if @records.count > 0
+    .row.mt-4
+      .col-xs-12.col-md-4.offset-md-6
+          == pagy_bootstrap_nav(@pagy)

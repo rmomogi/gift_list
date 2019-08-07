@@ -1,0 +1,57 @@
+doctype html
+html
+  head
+    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type" /
+    title Lista
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+  body
+    nav.navbar.navbar-expand-lg.navbar-light.bg-primary
+      a.navbar-brand.text-white.font-weight-bold href="#"  Lista
+      #navbarNavDropdown.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+          li.nav-item.ml-5
+            = link_to 'Criar lista', new_gift_list_path, {:class => 'nav-link text-white', :remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}
+          li.nav-item.dropdown.ml-5
+            a#navbarDropdownMenuLink.nav-link.dropdown-toggle.text-white aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" href="#" role="button"
+              | Listas
+            .dropdown-menu aria-labelledby="navbarDropdownMenuLink"
+              - @gift_lists.each do |gift_list|
+                = link_to gift_list.name, dashboard_change_default_gift_list_path(id: gift_list.id), {:class => 'dropdown-item', :method => 'post', :id => gift_list.id }
+          - if @default_gift_list
+              li.nav-item.ml-5
+                .navbar-text.text-white = "Lista selecionada: #{@default_gift_list.name}"
+              li.nav-item
+                .navbar-text.ml-5
+                  = link_to 'Ver lista', gift_list_path(id: @default_gift_list.id), class: 'text-white', remote: true
+      .form-inline.pr-4
+        = form_tag authenticated_root_path, method: :get do
+          = text_field_tag :search, nil, class: 'form-control', placeholder: 'Search', size: 50
+          = button_tag type:'submit', class: 'btn bg-transparent text-white' do
+            = fa_icon 'search'
+
+      ul.navbar-nav.pr-3
+        li.nav-item.dropdown
+          a.nav-link.dropdown-toggle.text-white href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+            = fa_icon "list"
+          .dropdown-menu.dropdown-menu-right aria-labelledby="navbarDropdownMenuLink"
+            = link_to 'Logout', destroy_user_session_path, {:class => 'dropdown-item', :method => 'delete'}
+    .container-fluid
+      = yield
+      = custom_bootstrap_flash
+      div#modal-window.modal.fade role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+
+      #confirm-delete.modal.fade aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1"
+        .modal-dialog
+          .modal-content
+            .modal-header
+              h5.modal-title Confirmar remoção
+              button.close type="button" data-dismiss="modal" aria-label="Close"
+                span aria-hidden="true" &times;
+            .modal-body
+              p Você está removendo uma história. Tem certeza disso?
+            .modal-footer
+              button.btn.btn-default data-dismiss="modal" type="button"  Cancel
+              a.btn.btn-danger.btn-ok-delete data-method="delete" Delete

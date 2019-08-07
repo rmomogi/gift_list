@@ -1,0 +1,6 @@
+<% if flash['notice'] %>
+  window.location.reload()
+<% end %>
+<% if flash['error'] %>
+  toastr.error("<%= flash['error'].html_safe %>")
+<% end %>

@@ -1,0 +1,20 @@
+.modal-dialog.modal-dialog-centered
+  .modal-content
+    .modal-header
+      h5#exampleModalLongTitle.modal-title
+      	= @gift_list.name
+      button.close aria-label="Close" data-dismiss="modal" type="button"
+        span aria-hidden="true"
+    .modal-body
+    	table.table.table-hover
+    		thead
+    			tr
+    				td Nome
+    				td.text-center Quantidade
+    		tbody
+	      	- @gift_list.items.each do |item|
+	        	tr
+	        		td = item.product.name
+	        		td.text-center = item.quantity
+    .modal-footer
+    	button.btn.btn-secondary data-dismiss="modal" type="button"  Close
