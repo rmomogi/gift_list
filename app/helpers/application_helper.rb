@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   include Pagy::Frontend
 
-	def custom_bootstrap_flash
+  def custom_bootstrap_flash
     flash_messages = []
     flash.each do |type, message|
       type = 'success' if type == 'notice'

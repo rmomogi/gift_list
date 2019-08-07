@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 require 'database_cleaner'
@@ -6,11 +8,11 @@ require 'simplecov'
 SimpleCov.start
 
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
-require "money-rails/test_helpers"
+require 'money-rails/test_helpers'
 
 require_relative 'support/controller_macros'
 
@@ -21,8 +23,8 @@ rescue ActiveRecord::PendingMigrationError => e
   exit 1
 end
 RSpec.configure do |config|
-  config.include Devise::Test::ControllerHelpers, :type => :controller
-  config.extend ControllerMacros, :type => :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.extend ControllerMacros, type: :controller
 
   config.include FactoryBot::Syntax::Methods
 
@@ -34,7 +36,7 @@ RSpec.configure do |config|
   config.before(:each) do
     DatabaseCleaner.strategy = :transaction
   end
-  config.before(:each, :js => true) do
+  config.before(:each, js: true) do
     DatabaseCleaner.strategy = :truncation
   end
   config.before(:each) do

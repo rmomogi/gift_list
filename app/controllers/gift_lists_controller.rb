@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class GiftListsController < BaseController
   before_action :authenticate_user!
-	before_action :set_gift_list, only: [:show, :update, :destroy, :edit]
+  before_action :set_gift_list, only: %i[show update destroy edit]
 
   def new
     @resource = GiftList.new

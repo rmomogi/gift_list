@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DashboardController < BaseController
   include Pagy::Backend
   before_action :authenticate_user!
@@ -10,14 +12,13 @@ class DashboardController < BaseController
       @categories = Category.roots
       @parent = nil
       @stocks = Stock.quantity_exists.includes(:product).by_search(search)
-      session[:category_id] = params[:category_id]
     else
       @parent = Category.find params[:category_id]
       @categories = @parent.descendants
       @stocks = Stock.quantity_exists.joins(:product).by_category(params[:category_id]).by_search(search)
-      session[:category_id] = params[:category_id]
     end
 
+    session[:category_id] = params[:category_id]
     @pagy, @records = pagy(@stocks, items: 8)
     default_gift_list
   end
@@ -28,15 +29,12 @@ class DashboardController < BaseController
   end
 
   private
+
   def default_gift_list
-    begin
-      if session[:default_gift_list]
-        @default_gift_list = GiftList.find session[:default_gift_list]
-      else
-        @default_gift_list = nil
-      end
-    rescue
-      @default_gift_list = nil
-    end
+    @default_gift_list = if session[:default_gift_list]
+                           GiftList.find session[:default_gift_list]
+                         end
+  rescue StandardError
+    @default_gift_list = nil
   end
 end
