@@ -8,3 +8,9 @@ Para execucação do projeto:
 
 Acessar a url http://localhost:3000/ e criar um novo usuário.
 Após logar, crie uma nova listagem. No sistema permite selecionar qual Listagem será default para selecionar os itens.
+
+# Recursos
+* Pesquisa
+* Paginação (pagy)
+* Navegação das categorias
+* Layout responsivo
